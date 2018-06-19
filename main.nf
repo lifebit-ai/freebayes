@@ -199,7 +199,11 @@ process "2_run_variant_caller" {
     file('calling_output.vcf') into methods_result
 
     script:
-    template "${params.method}"
+    """
+    pwd=\$PWD
+    cd ~/freebayes/scripts/
+    ./freebayes-parallel <(./fasta_generate_regions.py \$pwd/${fasta[2]} 100000) ${task.cpus} -f \$pwd/${fasta[1]} \$pwd/${bam[1]} > \$pwd/calling_output.vcf
+    """
 }
 
 
