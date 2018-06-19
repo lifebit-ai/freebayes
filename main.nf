@@ -112,7 +112,7 @@ params.resultdir = "Results";
 *
 *****/
 
-process "1A_preprocess_genome"{
+process preprocess_genome{
 
   container 'lifebitai/preprocessing_vc_tools'
 
@@ -137,7 +137,7 @@ process "1A_preprocess_genome"{
 }
 
 
-process '1B_preprocess_bam'{
+process preprocess_bam {
 
   tag "${bam[0]}"
   container 'lifebitai/preprocessing_vc_tools'
@@ -185,7 +185,7 @@ all_fa.cross(all_bam)
 *
 *****/
 
-process "2_run_variant_caller" {
+process run_variant_caller {
 
     tag "${bam[1]}"
     container "lifebitai/freebayes"
