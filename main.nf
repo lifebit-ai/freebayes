@@ -114,7 +114,7 @@ params.resultdir = "Results";
 
 process preprocess_genome{
 
-  container 'lifebitai/preprocessing_vc_tools'
+  container 'lifebitai/preprocessingvctools'
 
 
   input:
