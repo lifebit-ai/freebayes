@@ -41,11 +41,11 @@ else if(params.h38 ){
   gzi=file("s3://deepvariant-data/genomes/h38/GRCh38.p10.genome.fa.gz.gzi");
 }
 else if(params.test ){
-  fasta=file("testdata/ucsc.hg19.chr20.unittest.fasta");
-  fai=file("testdata/ucsc.hg19.chr20.unittest.fasta.fai");
-  fastagz=file("testdata/ucsc.hg19.chr20.unittest.fasta.gz");
-  gzfai=file("testdata/ucsc.hg19.chr20.unittest.fasta.gz.fai");
-  gzi=file("testdata/ucsc.hg19.chr20.unittest.fasta.gz.gzi");
+  fasta=file("s3://deepvariant-test/input/ucsc.hg19.chr20.unittest.fasta");
+  fai=file("s3://deepvariant-test/input//ucsc.hg19.chr20.unittest.fasta.fai");
+  fastagz=file("s3://deepvariant-test/input/ucsc.hg19.chr20.unittest.fasta.gz");
+  gzfai=file("s3://deepvariant-test/input/ucsc.hg19.chr20.unittest.fasta.gz.fai");
+  gzi=file("s3://deepvariant-test/input/ucsc.hg19.chr20.unittest.fasta.gz.gzi");
 }
 else if(params.hg19 ){
   fasta=file("s3://deepvariant-data/genomes/hg19/hg19.fa");
@@ -80,7 +80,7 @@ params.rgsm=20;
   Bam input files
   The input must be a path to a folder containing multiple bam files
 ---------------------------------------------------*/
-params.bam_folder="testdata";
+params.bam_folder="s3://deepvariant-test/input/";
 Channel.fromPath("${params.bam_folder}/*.bam").map{ file -> tuple(file.name, file) }.set{bamChannel}
 
 /*--------------------------------------------------
