@@ -19,6 +19,8 @@
 params.hg19="true";
 params.h38="";
 params.test="";
+params.hg19chr20="";
+
 
 params.fasta="nofasta";
 params.fai="nofai";
@@ -54,6 +56,13 @@ else if(params.hg19 ){
   gzfai=file("s3://deepvariant-data/genomes/hg19/hg19.fa.gz.fai");
   gzi=file("s3://deepvariant-data/genomes/hg19/hg19.fa.gz.gzi");
 }
+else if(params.hg19chr20 ){
+  fasta=file("s3://deepvariant-data/genomes/hg19chr20/chr20.fa");
+  fai=file("s3://deepvariant-data/genomes/hg19chr20/chr20.fa.fai");
+  fastagz=file("s3://deepvariant-data/genomes/hg19chr20/chr20.fa.gz");
+  gzfai=file("s3://deepvariant-data/genomes/hg19chr20/chr20.fa.gz.fai");
+  gzi=file("s3://deepvariant-data/genomes/hg19chr20/chr20.fa.gz.gzi");
+}
 else{
   System.out.println(" --fasta \"/path/to/your/genome\"  params is required and was not found! ");
   System.out.println(" or you can use standard genome versions by typing --hg19 or --h38 ");
@@ -81,7 +90,10 @@ params.rgsm=20;
   The input must be a path to a folder containing multiple bam files
 ---------------------------------------------------*/
 params.bam_folder="s3://deepvariant-test/input/";
-Channel.fromPath("${params.bam_folder}/*.bam").map{ file -> tuple(file.name, file) }.set{bamChannel}
+params.bam_file_prefix="*"
+
+
+Channel.fromPath("${params.bam_folder}/${params.bam_file_prefix}*.bam").map{ file -> tuple(file.name, file) }.set{bamChannel}
 
 /*--------------------------------------------------
   Variant Caller to be used
