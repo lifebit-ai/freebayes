@@ -170,8 +170,8 @@ process preprocess_bam {
     [[ `samtools view -H ${bam[0]} | grep '@RG' | wc -l`   > 0 ]] && { mv $bam ready; }|| { java -jar  \$PICARD  AddOrReplaceReadGroups \
     I=${bam[0]} O=ready/${bam[0]} RGID=${params.rgid} RGLB=${params.rglb} RGPL=${params.rgpl} RGPU=${params.rgpu} RGSM=${params.rgsm}; }
   ## Reorder Bam file
-    cd ready; 
-    ##mkdir ordered;  java -jar \$PICARD  ReorderSam I=${bam[0]} O=ordered/${bam[0]} ALLOW_INCOMPLETE_DICT_CONCORDANCE=true R=../$genome ;
+    cd ready; mkdir ordered;
+    ##java -jar \$PICARD  ReorderSam I=${bam[0]} O=ordered/${bam[0]} ALLOW_INCOMPLETE_DICT_CONCORDANCE=true R=../$genome ;
   ## Index Bam file
     cd ordered ; samtools index ${bam[0]};
   """
