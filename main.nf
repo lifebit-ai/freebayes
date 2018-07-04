@@ -139,10 +139,10 @@ process preprocess_genome{
   set file(fasta),file("${fasta}.fai"),file("${fasta}.gz"),file("${fasta}.gz.fai"), file("${fasta}.gz.gzi"),file("${fasta.baseName}.dict") into fastaChannel
   script:
   """
-  [[ $fai == "nofai" ]] &&  samtools faidx $fasta || echo " fai file of user is used, not created"
-  [[ $fastagz == "nofastagz" ]]  && bgzip -c ${fasta} > ${fasta}.gz || echo "fasta.gz file of user is used, not created "
-  [[ $gzfai == "nogzi" ]] && bgzip -c -i ${fasta} > ${fasta}.gz || echo "gzi file of user is used, not created"
-  [[ $gzi == "nogzfai" ]] && samtools faidx "${fasta}.gz" || echo "gz.fai file of user is used, not created"
+  [[ ${params.fai} == "nofai" ]] &&  samtools faidx $fasta || echo " fai file of user is used, not created"
+  [[ ${params.fastagz} == "nofastagz" ]]  && bgzip -c ${fasta} > ${fasta}.gz || echo "fasta.gz file of user is used, not created "
+  [[ ${params.gzfai} == "nogzi" ]] && bgzip -c -i ${fasta} > ${fasta}.gz || echo "gzi file of user is used, not created"
+  [[ ${params.gzi} == "nogzfai" ]] && samtools faidx "${fasta}.gz" || echo "gz.fai file of user is used, not created"
   PICARD=`which picard.jar`
   java -jar \$PICARD CreateSequenceDictionary R= $fasta O= ${fasta.baseName}.dict
   """
@@ -169,11 +169,8 @@ process preprocess_bam {
     mkdir ready
     [[ `samtools view -H ${bam[0]} | grep '@RG' | wc -l`   > 0 ]] && { mv $bam ready; }|| { java -jar  \$PICARD  AddOrReplaceReadGroups \
     I=${bam[0]} O=ready/${bam[0]} RGID=${params.rgid} RGLB=${params.rglb} RGPL=${params.rgpl} RGPU=${params.rgpu} RGSM=${params.rgsm}; }
-  ## Reorder Bam file
-    cd ready; 
-    ##java -jar \$PICARD  ReorderSam I=${bam[0]} O=ordered/${bam[0]} ALLOW_INCOMPLETE_DICT_CONCORDANCE=true R=../$genome ;
   ## Index Bam file
-     samtools index ${bam[0]};
+    cd ready; samtools index ${bam[0]};
   """
 
 }
