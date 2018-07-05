@@ -21,6 +21,10 @@ nextflow run main.nf --test
  --hg19
  --h38
  ```
+ For testing purposes we provide the chr20 of the hg19 version of the genome, accessible by: 
+ ```
+ --hg19chr20
+ ```
  
  Alternatively, a user can use an own reference genome version, by using the following parameters:
 
@@ -39,6 +43,10 @@ If the optional parameters are not passed, they will be automatically be produce
 --bam_folder "/path/to/folder/where/bam/files/are"            REQUIRED
 ```
 
+In case only some specific files inside the BAM folder should be used as input, a file prefix can be defined by: 
+```
+--bam_file_prefix MYPREFIX
+```
 All the BAM files on which the variant calling should be performed should be all stored in the same folder. 
 
 **! TIP** 
