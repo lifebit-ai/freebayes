@@ -126,7 +126,7 @@ params.resultdir = "Results";
 
 process preprocess_genome{
 
-  container 'lifebitai/preprocessingvctools'
+  container 'lifebitai/samtools'
 
 
   input:
@@ -143,8 +143,7 @@ process preprocess_genome{
   [[ ${params.fastagz} == "nofastagz" ]]  && bgzip -c ${fasta} > ${fasta}.gz || echo "fasta.gz file of user is used, not created "
   [[ ${params.gzfai} == "nogzi" ]] && bgzip -c -i ${fasta} > ${fasta}.gz || echo "gzi file of user is used, not created"
   [[ ${params.gzi} == "nogzfai" ]] && samtools faidx "${fasta}.gz" || echo "gz.fai file of user is used, not created"
-  PICARD=`/picard.jar`
-  java -jar \$PICARD CreateSequenceDictionary R= $fasta O= ${fasta.baseName}.dict
+  java -jar /picard.jar CreateSequenceDictionary R= $fasta O= ${fasta.baseName}.dict
   """
 }
 
