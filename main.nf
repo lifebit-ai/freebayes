@@ -143,7 +143,7 @@ process preprocess_genome{
   [[ ${params.fastagz} == "nofastagz" ]]  && bgzip -c ${fasta} > ${fasta}.gz || echo "fasta.gz file of user is used, not created "
   [[ ${params.gzfai} == "nogzi" ]] && bgzip -c -i ${fasta} > ${fasta}.gz || echo "gzi file of user is used, not created"
   [[ ${params.gzi} == "nogzfai" ]] && samtools faidx "${fasta}.gz" || echo "gz.fai file of user is used, not created"
-  PICARD=`which picard.jar`
+  PICARD=`/picard.jar`
   java -jar \$PICARD CreateSequenceDictionary R= $fasta O= ${fasta.baseName}.dict
   """
 }
