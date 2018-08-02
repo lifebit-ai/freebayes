@@ -163,10 +163,9 @@ process preprocess_bam {
 
   script:
   """
-  PICARD=`which picard.jar`
   ## Add RG line in case it is missing
     mkdir ready
-    [[ `samtools view -H ${bam[0]} | grep '@RG' | wc -l`   > 0 ]] && { mv $bam ready; }|| { java -jar  \$PICARD  AddOrReplaceReadGroups \
+    [[ `samtools view -H ${bam[0]} | grep '@RG' | wc -l`   > 0 ]] && { mv $bam ready; }|| { java -jar  /picard.jar  AddOrReplaceReadGroups \
     I=${bam[0]} O=ready/${bam[0]} RGID=${params.rgid} RGLB=${params.rglb} RGPL=${params.rgpl} RGPU=${params.rgpu} RGSM=${params.rgsm}; }
   ## Index Bam file
     cd ready; samtools index ${bam[0]};
