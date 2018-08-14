@@ -197,7 +197,7 @@ process run_variant_caller {
 
     tag "${bam[1]}"
     container "lifebitai/freebayes"
-    publishDir "$baseDir/${params.resultdir}"
+    publishDir params.resultdir, mode: 'copy'
     cpus params.j
 
     input:
