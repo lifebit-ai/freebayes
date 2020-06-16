@@ -143,7 +143,7 @@ process preprocess_genome{
   [[ ${params.fastagz} == "nofastagz" ]]  && bgzip -c ${fasta} > ${fasta}.gz || echo "fasta.gz file of user is used, not created "
   [[ ${params.gzfai} == "nogzi" ]] && bgzip -c -i ${fasta} > ${fasta}.gz || echo "gzi file of user is used, not created"
   [[ ${params.gzi} == "nogzfai" ]] && samtools faidx "${fasta}.gz" || echo "gz.fai file of user is used, not created"
-  java -jar /picard.jar CreateSequenceDictionary R= $fasta O= ${fasta.baseName}.dict
+  picard CreateSequenceDictionary R= $fasta O= ${fasta.baseName}.dict
   """
 }
 
@@ -165,7 +165,7 @@ process preprocess_bam {
   """
   ## Add RG line in case it is missing
     mkdir ready
-    [[ `samtools view -H ${bam[0]} | grep '@RG' | wc -l`   > 0 ]] && { mv $bam ready; }|| { java -jar  /picard.jar  AddOrReplaceReadGroups \
+    [[ `samtools view -H ${bam[0]} | grep '@RG' | wc -l`   > 0 ]] && { mv $bam ready; }|| { picard  AddOrReplaceReadGroups \
     I=${bam[0]} O=ready/${bam[0]} RGID=${params.rgid} RGLB=${params.rglb} RGPL=${params.rgpl} RGPU=${params.rgpu} RGSM=${params.rgsm}; }
   ## Index Bam file
     cd ready; samtools index ${bam[0]};
