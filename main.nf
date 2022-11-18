@@ -126,7 +126,7 @@ params.resultdir = "./Results";
 
 process preprocess_genome{
 
-  container 'lifebitai/samtools'
+  container 'broadinstitute/gatk:4.3.0.0'
 
 
   input:
@@ -143,7 +143,7 @@ process preprocess_genome{
   [[ ${params.fastagz} == "nofastagz" ]]  && bgzip -c ${fasta} > ${fasta}.gz || echo "fasta.gz file of user is used, not created "
   [[ ${params.gzfai} == "nogzi" ]] && bgzip -c -i ${fasta} > ${fasta}.gz || echo "gzi file of user is used, not created"
   [[ ${params.gzi} == "nogzfai" ]] && samtools faidx "${fasta}.gz" || echo "gz.fai file of user is used, not created"
-  picard CreateSequenceDictionary R= $fasta O= ${fasta.baseName}.dict
+  gatk CreateSequenceDictionary -R $fasta -O ${fasta.baseName}.dict
   """
 }
 
@@ -151,7 +151,7 @@ process preprocess_genome{
 process preprocess_bam {
 
   tag "${bam[0]}"
-  container 'lifebitai/samtools'
+  container 'broadinstitute/gatk:4.3.0.0'
 
 
   input:
@@ -165,8 +165,8 @@ process preprocess_bam {
   """
   ## Add RG line in case it is missing
     mkdir ready
-    [[ `samtools view -H ${bam[0]} | grep '@RG' | wc -l`   > 0 ]] && { mv $bam ready; }|| { picard  AddOrReplaceReadGroups \
-    I=${bam[0]} O=ready/${bam[0]} RGID=${params.rgid} RGLB=${params.rglb} RGPL=${params.rgpl} RGPU=${params.rgpu} RGSM=${params.rgsm}; }
+    [[ `samtools view -H ${bam[0]} | grep '@RG' | wc -l`   > 0 ]] && { mv $bam ready; }|| { gatk  AddOrReplaceReadGroups \
+    -I ${bam[0]} -O ready/${bam[0]} --RGID ${params.rgid} --RGLB ${params.rglb} --RGPL ${params.rgpl} --RGPU ${params.rgpu} --RGSM ${params.rgsm}; }
   ## Index Bam file
     cd ready; samtools index ${bam[0]};
   """
